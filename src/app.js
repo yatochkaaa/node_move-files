@@ -1,21 +1,37 @@
 'use strict';
+import * as fs from 'fs';
 
-/**
- * Implement sum function:
- *
- * Function takes 2 numbers and returns their sum
- *
- * sum(1, 2) === 3
- * sum(1, 11) === 12
- *
- * @param {number} a
- * @param {number} b
- *
- * @return {number}
- */
-function sum(a, b) {
-  // write code here
-  return a + b;
+const moveFile = (
+  input,
+  output
+) => {
+  const initialPath = `src/${input}`;
+  let resultOutput = output;
+
+  fs.readFile(initialPath, 'utf-8', (error, fileData) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (!output.includes('.')) {
+      resultOutput = `${output}/${input}`;
+    }
+
+    fs.writeFile(`src/${resultOutput}`, fileData, (error) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+    });
+
+    fs.rm(initialPath, (error) => {
+      if (error) {
+        console.log(error);
+        return;
+      };
+    });
+  });
 }
 
-module.exports = sum;
+moveFile('1.txt');
